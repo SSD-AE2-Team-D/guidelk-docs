@@ -1,0 +1,145 @@
+<form #hotelForm="ngForm">
+    <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign=" start" class="gene-form-wizard">
+        <mat-card fxFlex="100%">
+            <mat-card-content>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Hotel Name</mat-label>
+                            <input matInput placeholder="Hotel Name" name="hotelName"
+                                   [(ngModel)]="hotel.hotelName" required
+                                   #hotelName="ngModel">
+                            <div *ngIf="hotelName.errors && (hotelName.dirty || hotelName.touched)">
+                                <small class="gene-block"
+                                       *ngIf="hotelName.errors.required && hotelName.touched"
+                                       class="mat-text-warn">
+                                    You must include a hotel name.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Category</mat-label>
+                            <mat-select placeholder="Category" name="categoryId"
+                                        [(ngModel)]="hotel.categoryId" #categoryId="ngModel"
+                                        required>
+                                <mat-option *ngFor="let category of hotelCategoryTypeList"
+                                            [value]="category.categoryId">
+                                    {{category.categoryDescription}}
+                                </mat-option>
+                            </mat-select>
+                            <div *ngIf="categoryId.errors && (categoryId.dirty || categoryId.touched)">
+                                <small class="gene-block"
+                                       *ngIf="categoryId.errors.required && categoryId.touched"
+                                       class="mat-text-warn">
+                                    You must select a category.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Star Grading</mat-label>
+                            <mat-select placeholder="Star Grading" name="starGradingId"
+                                        [(ngModel)]="hotel.starGradingId" #starGradingId="ngModel">
+                                <mat-option *ngFor="let grading of starGradingList"
+                                            [value]="grading.starGradingId">
+                                    {{grading.starGradingDescription}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Room Count</mat-label>
+                            <input matInput type="number" placeholder="Room Count" name="roomCount"
+                                   [(ngModel)]="hotel.roomCount" required
+                                   #roomCount="ngModel">
+                            <div *ngIf="roomCount.errors && (roomCount.dirty || roomCount.touched)">
+                                <small class="gene-block"
+                                       *ngIf="roomCount.errors.required && roomCount.touched"
+                                       class="mat-text-warn">
+                                    You must include a room count.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Date of Start</mat-label>
+                            <input matInput [(ngModel)]="hotel.dateOfStart" [matDatepicker]="dateOfStart"
+                                   name="dateOfStart" [max]="todayDate" #DateOfStart="ngModel">
+                            <mat-datepicker-toggle matSuffix [for]="dateOfStart"></mat-datepicker-toggle>
+                            <mat-datepicker #dateOfStart></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Status</mat-label>
+                            <mat-select placeholder="Status" name="status"
+                                        [(ngModel)]="hotel.status" #status="ngModel"
+                                        required>
+                                <mat-option *ngFor="let status of statusList"
+                                            [value]="status.statusSeq">
+                                    {{status.status}}
+                                </mat-option>
+                            </mat-select>
+                            <div *ngIf="status.errors && (status.dirty || status.touched)">
+                                <small class="gene-block" *ngIf="status.errors.required && status.touched"
+                                       class="mat-text-warn">
+                                    You must select a status.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <mat-card>
+        <mat-card-content>
+            <app-hotel-type-feature [actionType]="actionType" [roomTypeList]="hotel.roomTypes"></app-hotel-type-feature>
+        </mat-card-content>
+    </mat-card>
+    <mat-card>
+        <div class="mat-card-devHdr" style="font-size: medium; font-weight: bold">Reference Data</div>
+        <mat-card-content>
+            <app-address-book #addressBookComponent [addressBook]="hotel.addressBook"></app-address-book>
+        </mat-card-content>
+        <app-audit *ngIf="hotel.hotelId" [createdBy]="hotel.createdBy"
+                   [createdDate]="hotel.createdDate"
+                   [lastModifiedBy]="hotel.lastModifiedBy" [lastModifiedDate]="hotel.lastModifiedDate">
+        </app-audit>
+    </mat-card>
+
+    <div class="pad-wrap">
+        <mat-card-actions>
+            <button *ngIf="!isUpdate" (click)="createHotel()" [disabled]="!hotelForm.valid"
+                    mat-raised-button
+                    color="primary" type="submit">Save
+            </button>
+            <button *ngIf="isNew"
+                    (click)="resetForm(); hotel.hotelId=null; isUpdate=false; isNew=false;"
+                    [disabled]="!hotelForm.valid" mat-raised-button color="green" type="submit">New
+            </button>
+            <button *ngIf="isUpdate" (click)="updateHotel()" [disabled]="!hotelForm.valid"
+                    mat-raised-button color="accent" type="submit">Update
+            </button>
+            <button *ngIf="isUpdate" (click)="deleteHotel()"
+                    [disabled]="!rolePermission.filterPermission('ROLE_operationalInfo@hotel_DELETE')" mat-raised-button
+                    color="warn" type="submit">
+                Delete
+            </button>
+            <button *ngIf="isUpdate && !isNew" class="dialog-cancel-button" (click)="onCancel.emit()" mat-raised-button>
+                Cancel
+            </button>
+
+        </mat-card-actions>
+    </div>
+
+</form>

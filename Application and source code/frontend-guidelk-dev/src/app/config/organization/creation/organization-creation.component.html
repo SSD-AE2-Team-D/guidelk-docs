@@ -1,0 +1,155 @@
+<form #organizationForm="ngForm">
+    <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign=" start" class="gene-form-wizard">
+        <mat-card fxFlex="100%">
+            <mat-card-content>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Organization Name</mat-label>
+                            <input matInput placeholder="Organization Name" name="organizationName"
+                                   [(ngModel)]="organization.organizationName" required
+                                   #organizationName="ngModel">
+                            <div *ngIf="organizationName.errors && (organizationName.dirty || organizationName.touched)">
+                                <small class="gene-block"
+                                       *ngIf="organizationName.errors.required && organizationName.touched"
+                                       class="mat-text-warn">
+                                    You must include a organization name.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Short Code</mat-label>
+                            <input matInput placeholder="Short Code" name="shortCode"
+                                   [(ngModel)]="organization.shortCode" required
+                                   #shortCode="ngModel">
+                            <div *ngIf="shortCode.errors && (shortCode.dirty || shortCode.touched)">
+                                <small class="gene-block"
+                                       *ngIf="shortCode.errors.required && shortCode.touched"
+                                       class="mat-text-warn">
+                                    You must include a short code.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Vat No</mat-label>
+                            <input matInput placeholder="Vat No" name="vatNo"
+                                   [(ngModel)]="organization.vatNo"
+                                   #vatNo="ngModel">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Svat No</mat-label>
+                            <input matInput placeholder="Svat No" name="sVatNo"
+                                   [(ngModel)]="organization.sVatNo"
+                                   #sVatNo="ngModel">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Description</mat-label>
+                            <textarea matInput placeholder="Description" name="description"
+                                      [(ngModel)]="organization.description" #description="ngModel">
+                        </textarea>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Module</mat-label>
+                            <mat-select placeholder="Module" name="modules"
+                                        [(ngModel)]="organization.modules"
+                                        #modulesList="ngModel" multiple required>
+                                <app-select-check-all *ngIf="moduleList" [model]="modulesList"
+                                                      [values]="moduleList" [type]="'Org'">
+                                </app-select-check-all>
+
+                                <mat-option *ngFor="let module of moduleList"
+                                            [value]="module">
+                                    {{module.moduleName}}
+                                </mat-option>
+                            </mat-select>
+                            <div *ngIf="modulesList.errors && (modulesList.dirty || modulesList.touched)">
+                                <small class="gene-block"
+                                       *ngIf="modulesList.errors.required && modulesList.touched"
+                                       class="mat-text-warn">
+                                    You must select a module.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                        <p style="font-size:medium; font-weight: bold; color: #2eb82e">
+                            Selected modules:
+                            <span *ngFor="let mod of organization.modules; let f = first; let l = last;">
+                                <span style="color: blue">{{mod.moduleName}}</span>
+                                <span *ngIf="!(f && l) && !l">,</span>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Status</mat-label>
+                            <mat-select placeholder="Status" name="status"
+                                        [(ngModel)]="organization.status" #status="ngModel"
+                                        required>
+                                <mat-option *ngFor="let status of statusList"
+                                            [value]="status.statusSeq">
+                                    {{status.status}}
+                                </mat-option>
+                            </mat-select>
+                            <div *ngIf="status.errors && (status.dirty || status.touched)">
+                                <small class="gene-block" *ngIf="status.errors.required && status.touched"
+                                       class="mat-text-warn">
+                                    You must select a status.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <mat-card>
+        <div class="mat-card-devHdr" style="font-size: medium; font-weight: bold">Reference Data</div>
+        <mat-card-content>
+            <app-address-book #addressBookComponent [addressBook]="organization.addressBook"></app-address-book>
+        </mat-card-content>
+        <app-audit *ngIf="organization.organizationId" [createdBy]="organization.createdBy"
+                   [createdDate]="organization.createdDate"
+                   [lastModifiedBy]="organization.lastModifiedBy" [lastModifiedDate]="organization.lastModifiedDate">
+        </app-audit>
+    </mat-card>
+
+    <div class="pad-wrap">
+        <mat-card-actions>
+            <button *ngIf="!isUpdate" (click)="createOrganization()" [disabled]="!organizationForm.valid"
+                    mat-raised-button
+                    color="primary" type="submit">Save
+            </button>
+            <button *ngIf="isNew"
+                    (click)="resetForm(); organization.organizationId=null; isUpdate=false; isNew=false;"
+                    [disabled]="!organizationForm.valid" mat-raised-button color="green" type="submit">New
+            </button>
+            <button *ngIf="isUpdate" (click)="updateOrganization()" [disabled]="!organizationForm.valid"
+                    mat-raised-button color="accent" type="submit">Update
+            </button>
+            <button *ngIf="isUpdate" (click)="deleteOrganization()"
+                    [disabled]="!rolePermission.filterPermission('ROLE_config@organization_DELETE')" mat-raised-button
+                    color="warn" type="submit">
+                Delete
+            </button>
+            <button *ngIf="isUpdate && !isNew" class="dialog-cancel-button" (click)="onCancel.emit()" mat-raised-button>
+                Cancel
+            </button>
+
+        </mat-card-actions>
+    </div>
+</form>

@@ -1,0 +1,30 @@
+div.mat-form-field-flex {
+    width: 700px;
+    height: 60px;
+    margin-right: 20px;
+}
+
+.pad-wrap {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.custom-class .mat-icon {
+    vertical-align: middle;
+}
+
+.dialog-cancel-button {
+    margin: 0 !important;
+    float: right;
+    background-color: gray;
+    color: white;
+}
+
+.red-snackbar{
+    background-color:brown;
+    color:white;
+}
+
+.mat-text-warn{
+    color: #ec1313;
+}

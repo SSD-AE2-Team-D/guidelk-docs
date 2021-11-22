@@ -1,0 +1,170 @@
+<form #userForm="ngForm">
+    <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign=" start" class="gene-form-wizard">
+        <mat-card fxFlex="100%">
+            <mat-card-content>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>User Name</mat-label>
+                            <input matInput placeholder="User Name" minlength="5" maxlength="30" name="userName"
+                                   [(ngModel)]="user.userName" required
+                                   #userName="ngModel" [disabled]="isDisabled">
+                            <div *ngIf="userName.errors && (userName.dirty || userName.touched)">
+                                <small class="gene-block"
+                                       *ngIf="userName.errors.required && userName.touched"
+                                       class="mat-text-warn">
+                                    You must include a user name.
+                                </small>
+                                <small class="gene-block" *ngIf="userName.errors.minlength && userName.touched"
+                                       class="mat-text-warn">
+                                    Your username must be at least 5 characters long.
+                                </small>
+                                <small class="gene-block" *ngIf="userName.errors.maxlength && userName.touched"
+                                       class="mat-text-warn">
+                                    Your username cannot exceed 30 characters.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Email</mat-label>
+                            <input type="email" matInput placeholder="Email" minlength="5" maxlength="100" name="email"
+                                   [(ngModel)]="user.email" [pattern]="emailPattern" [disabled]="isDisabled"
+                                   #Email="ngModel"
+                                   required>
+                            <div *ngIf="Email.errors && (Email.dirty || Email.touched)">
+                                <small class="gene-block"
+                                       *ngIf="Email.errors.required && Email.touched && Email.invalid"
+                                       class="mat-text-warn">
+                                    You must include an email address.
+                                </small>
+                                <small class="gene-block" *ngIf="Email.errors.minlength && Email.touched"
+                                       class="mat-text-warn">
+                                    Your email must be at least 5 characters long.
+                                </small>
+                                <small class="gene-block" *ngIf="Email.errors.maxlength && Email.touched"
+                                       class="mat-text-warn">
+                                    Your email cannot exceed 100 characters.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div *ngIf="actionType === 'Create'" fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Password</mat-label>
+                            <input matInput type="password" placeholder="Password" name="password"
+                                   [(ngModel)]="user.password" [disabled]="isDisabled"
+                                   #Password="ngModel" minlength="5" maxlength="12" required>
+                            <div *ngIf="Password.errors && (Password.dirty || Password.touched)">
+                                <small class="gene-block"
+                                       *ngIf="Password.errors.required && Password.touched && Password.invalid"
+                                       class="mat-text-warn">
+                                    You must include an password.
+                                </small>
+                                <small class="gene-block" *ngIf="Password.errors.minlength && Password.touched"
+                                       class="mat-text-warn">
+                                    Your password must be at least 5 characters long.
+                                </small>
+                                <small class="gene-block" *ngIf="Password.errors.maxlength && Password.touched"
+                                       class="mat-text-warn">
+                                    Your password cannot exceed 12 characters.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Confirm Password</mat-label>
+                            <input matInput type="password" placeholder="Password" name="password"
+                                   [(ngModel)]="user.confirmPassword" [disabled]="isDisabled"
+                                   #ConfirmPassword="ngModel" minlength="5" maxlength="12" required>
+                            <div *ngIf="ConfirmPassword.errors && (ConfirmPassword.dirty || ConfirmPassword.touched)">
+                                <small class="gene-block"
+                                       *ngIf="ConfirmPassword.dirty && ((Password.errors && Password.errors.compare) || (ConfirmPassword.errors && ConfirmPassword.errors.compare)) && !ConfirmPassword.errors.required"
+                                       class="mat-text-warn">
+                                    You must include an password.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Mobile No</mat-label>
+                            <input matInput placeholder="Mobile" name="mobile" [(ngModel)]="user.mobileNo"
+                                   #Mobile="ngModel" (keydown)="isNumber($event)" maxlength="12">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="20" fxFlex="50">
+                        <div class="mat-card-devHdr" style="font-size: medium; font-weight: bold ">Activation</div>
+                        <mat-checkbox [(ngModel)]="user.enabled" name="enable" #Enable="ngModel"
+                                      class="example-margin">Enable User
+                        </mat-checkbox>
+                        <br>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Status</mat-label>
+                            <mat-select placeholder="Status" name="status"
+                                        [(ngModel)]="user.status" #status="ngModel"
+                                        required>
+                                <mat-option *ngFor="let status of statusList"
+                                            [value]="status.statusSeq">
+                                    {{status.status}}
+                                </mat-option>
+                            </mat-select>
+                            <div *ngIf="status.errors && (status.dirty || status.touched)">
+                                <small class="gene-block" *ngIf="status.errors.required && status.touched"
+                                       class="mat-text-warn">
+                                    You must select a status.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <br>
+                        <div class="mat-card-devHdr" style="font-size: medium; font-weight: bold">Role</div>
+                        <mat-card-content>
+                            <role-display [roleList]="roleList" [actionType]="actionType"
+                                          [userId]="user.userId"></role-display>
+                        </mat-card-content>
+                    </div>
+                </div>
+            </mat-card-content>
+            <app-audit *ngIf="user.userId" [createdBy]="user.createdBy"
+                       [createdDate]="user.createdDate"
+                       [lastModifiedBy]="user.lastModifiedBy" [lastModifiedDate]="user.lastModifiedDate">
+            </app-audit>
+        </mat-card>
+    </div>
+    <div class="pad-wrap">
+        <mat-card-actions>
+            <button *ngIf="!isUpdate" (click)="createUser()" [disabled]="!userForm.valid"
+                    mat-raised-button
+                    color="primary" type="submit">Save
+            </button>
+            <button *ngIf="isNew"
+                    (click)="resetForm(); user.userId=null; isUpdate=false; isNew=false;"
+                    [disabled]="!userForm.valid" mat-raised-button color="green" type="submit">New
+            </button>
+            <button *ngIf="isUpdate" (click)="updateUser()" [disabled]="!userForm.valid"
+                    mat-raised-button color="accent" type="submit">Update
+            </button>
+            <button *ngIf="isUpdate" (click)="deleteUser()"
+                    [disabled]="!rolePermission.filterPermission('ROLE_config@user_DELETE')" mat-raised-button
+                    color="warn" type="submit">
+                Delete
+            </button>
+            <button *ngIf="isUpdate && !isNew" class="dialog-cancel-button" (click)="onCancel.emit()" mat-raised-button>
+                Cancel
+            </button>
+
+        </mat-card-actions>
+    </div>
+</form>

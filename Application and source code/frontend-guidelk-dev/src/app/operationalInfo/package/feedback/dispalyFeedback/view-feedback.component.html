@@ -1,0 +1,44 @@
+<mat-card fxFlex="100%">
+    <div fxLayout="column">
+        <form #feedbackViewForm="ngForm">
+            <div class="example-container mat-elevation-z8" style="overflow: auto;">
+                <table mat-table [dataSource]="packageFeedbackInfoTableDataSource" matSort style="width: 100%">
+                    <ng-container matColumnDef="Feedback">
+                        <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Feedback
+                        </th>
+                        <td mat-cell *matCellDef="let element" style="font-size: small; font-weight:bold;">
+                            {{element.comment}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="CreatedBy">
+                        <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Created By
+                        </th>
+                        <td mat-cell *matCellDef="let element"
+                            style="font-size: small; font-weight:bold;"> {{element.createdBy}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="CreatedDate">
+                        <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Created Date
+                        </th>
+                        <td mat-cell *matCellDef="let element"
+                            style="font-size: small; font-weight:bold;"> {{element.createdDate |  date:'MM/dd/yyyy'}}
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[25]"></mat-paginator>
+            </div>
+            <div class="pad-wrap">
+                <mat-card-actions>
+                    <button class="dialog-cancel-button" (click)="onCancel.emit()" mat-raised-button>
+                        Cancel
+                    </button>
+                </mat-card-actions>
+            </div>
+        </form>
+
+    </div>
+
+</mat-card>
+

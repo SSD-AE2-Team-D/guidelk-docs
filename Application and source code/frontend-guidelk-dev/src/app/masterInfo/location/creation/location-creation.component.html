@@ -1,0 +1,134 @@
+<form #locationForm="ngForm">
+    <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign=" start" class="gene-form-wizard">
+        <mat-card fxFlex="100%">
+            <mat-card-content>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Location Name</mat-label>
+                            <input matInput placeholder="Location Name" name="locationName"
+                                   [(ngModel)]="location.locationName" required
+                                   #locationName="ngModel">
+                            <div *ngIf="locationName.errors && (locationName.dirty || locationName.touched)">
+                                <small class="gene-block"
+                                       *ngIf="locationName.errors.required && locationName.touched"
+                                       class="mat-text-warn">
+                                    You must include a location name.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Location Code</mat-label>
+                            <input matInput placeholder="Location Code" name="locationCode"
+                                   [(ngModel)]="location.locationCode" required
+                                   #locationCode="ngModel">
+                            <div *ngIf="locationCode.errors && (locationCode.dirty || locationCode.touched)">
+                                <small class="gene-block"
+                                       *ngIf="locationCode.errors.required && locationCode.touched"
+                                       class="mat-text-warn">
+                                    You must include a location code.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Longitude</mat-label>
+                            <input matInput placeholder="Longitude" name="longitude" [(ngModel)]="location.longitude"
+                                   #Longitude="ngModel">
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Latitude</mat-label>
+                            <input matInput placeholder="Latitude" name="latitude" [(ngModel)]="location.latitude"
+                                   #Latitude="ngModel">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Country</mat-label>
+                            <mat-select placeholder="Country" name="country"
+                                        [(ngModel)]="location.countryId" #country="ngModel"
+                                        required>
+                                <mat-option *ngFor="let country of countryList"
+                                            [value]="country.countryId">
+                                    {{country.countryName}}
+                                </mat-option>
+                            </mat-select>
+                            <div *ngIf="country.errors && (country.dirty || country.touched)">
+                                <small class="gene-block" *ngIf="country.errors.required && country.touched"
+                                       class="mat-text-warn">
+                                    You must select a country.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Description</mat-label>
+                            <textarea matInput placeholder="Description" name="description"
+                                      [(ngModel)]="location.description" #description="ngModel">
+                        </textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Status</mat-label>
+                            <mat-select placeholder="Status" name="status"
+                                        [(ngModel)]="location.status" #status="ngModel"
+                                        required>
+                                <mat-option *ngFor="let status of statusList"
+                                            [value]="status.statusSeq">
+                                    {{status.status}}
+                                </mat-option>
+                            </mat-select>
+                            <div *ngIf="status.errors && (status.dirty || status.touched)">
+                                <small class="gene-block" *ngIf="status.errors.required && status.touched"
+                                       class="mat-text-warn">
+                                    You must select a status.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </mat-card-content>
+            <app-audit *ngIf="location.locationId" [createdBy]="location.createdBy"
+                       [createdDate]="location.createdDate"
+                       [lastModifiedBy]="location.lastModifiedBy" [lastModifiedDate]="location.lastModifiedDate">
+            </app-audit>
+        </mat-card>
+    </div>
+    <div class="pad-wrap">
+        <mat-card-actions>
+            <button *ngIf="!isUpdate" (click)="createLocation()" [disabled]="!locationForm.valid"
+                    mat-raised-button
+                    color="primary" type="submit">Save
+            </button>
+            <button *ngIf="isNew"
+                    (click)="resetForm(); location.locationId=null; isUpdate=false; isNew=false;"
+                    [disabled]="!locationForm.valid" mat-raised-button color="green" type="submit">New
+            </button>
+            <button *ngIf="isUpdate" (click)="updateLocation()" [disabled]="!locationForm.valid"
+                    mat-raised-button color="accent" type="submit">Update
+            </button>
+            <button *ngIf="isUpdate" (click)="deleteLocation()"
+                    [disabled]="!rolePermission.filterPermission('ROLE_masterInfo@location_DELETE')" mat-raised-button
+                    color="warn" type="submit">
+                Delete
+            </button>
+            <button *ngIf="isUpdate && !isNew" class="dialog-cancel-button" (click)="onCancel.emit()" mat-raised-button>
+                Cancel
+            </button>
+
+        </mat-card-actions>
+    </div>
+</form>

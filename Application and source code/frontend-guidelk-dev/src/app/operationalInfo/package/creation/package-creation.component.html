@@ -1,0 +1,17 @@
+<form #packageForm="ngForm">
+    <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign=" start" class="gene-form-wizard">
+        <mat-card fxFlex="100%">
+            <div class="gene-card-content">
+                <mat-tab-group [selectedIndex]="selectedIndex">
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <mat-icon>bed</mat-icon>
+                            &nbsp; <h1 style="font-size: large; font-weight: bold; color: #1976d2">Stay</h1>
+                        </ng-template>
+                        <app-stay-package-creation></app-stay-package-creation>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </mat-card>
+    </div>
+</form>

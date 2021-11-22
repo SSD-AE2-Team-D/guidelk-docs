@@ -1,0 +1,65 @@
+<form #roomTypeForm="ngForm">
+    <div class="gene-card-content">
+        <mat-card class="example-card" fxFlex="100%">
+            <div class="gene-card-title">
+                <div fxLayout="row" fxLayoutAlign="start center">
+                    <div fxLayout="column">
+                        <h4>Room Types & Features</h4>
+                    </div>
+                    <span fxFlex></span>
+
+                </div>
+                <mat-divider></mat-divider>
+            </div>
+            <div class="gene-card-content" style="overflow-x:auto;">
+                <br>
+                <div>
+                    <button class="add-row-btn" mat-raised-button color="accent"
+                            matTooltip="Add Row" type="button" (click)="addRow()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <br>
+                <div class="example-container mat-elevation-z8">
+                    <table mat-table #table [dataSource]="dataSource">
+                        <ng-container matColumnDef="RoomType">
+                            <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Room Type
+                            </th>
+                            <td mat-cell *matCellDef="let element ;  let i = index;"
+                                style="font-size: small; font-weight:bold;">
+                                <mat-form-field class="full-wid" appearance="outline">
+                                    <mat-label>Room Type</mat-label>
+                                    <input matInput placeholder="Room Type" [(ngModel)]="element.roomType"
+                                           name="roomType{{i}}">
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Feature">
+                            <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;">
+                                Feature
+                            </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" style="font-size: small; font-weight:bold;">
+                                <room-feature-display [actionType]="actionType" [roomFeatureList]="element.roomFeatures" [displayFeatureList]="element.roomFeatures" [roomTypeId]="element.roomTypeId"></room-feature-display>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="Actions">
+                            <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;">
+                                Actions
+                            </th>
+                            <td mat-cell *matCellDef="let element " style="font-size: small; font-weight:bold;">
+                                <button class="btn btn-warning" mat-raised-button color="warn" type="button"
+                                        (click)="delete(element, element.roomTypeId)">
+                                    Delete
+                                </button>
+                            </td>
+
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</form>

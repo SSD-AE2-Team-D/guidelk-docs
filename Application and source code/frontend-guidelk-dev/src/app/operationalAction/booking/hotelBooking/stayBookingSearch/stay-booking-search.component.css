@@ -1,0 +1,70 @@
+div.mat-form-field-flex {
+    width: 680px;
+    height: 60px;
+    margin-right: 20px;
+}
+
+.dialog-cancel-button {
+    margin: 0 !important;
+    float: right;
+    background-color: gray;
+    color: white;
+}
+
+.pad-wrap {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.example-header {
+    min-height: 64px;
+    padding: 8px 24px 0;
+}
+
+.custom-class .mat-icon {
+    vertical-align: middle;
+}
+
+.status-approved {
+    background-color: #2eb82e;
+    color: #ffffff;
+}
+
+.status-deleted {
+    background-color: darkgray;
+    color: #ffffff;
+}
+
+.status-open {
+    background-color: #ec1313;
+    color: #ffffff;
+}
+
+.status-closed {
+    background-color: #009999;
+    color: #ffffff;
+}
+
+.booking-pending {
+    background-color: #1976d2;
+    color: #ffffff;
+}
+
+.booking-confirm {
+    background-color: #2eb82e;
+    color: #ffffff;
+}
+
+.booking-cancel {
+    background-color: #888888;
+    color: #ffffff;
+}
+
+.red-snackbar{
+    background-color:brown;
+    color:white;
+}
+
+.mat-text-warn{
+    color: #ec1313;
+}

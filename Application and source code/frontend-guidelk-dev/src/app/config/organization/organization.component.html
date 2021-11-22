@@ -1,0 +1,17 @@
+<mat-card>
+    <span style="color: #125699; font-size: large;">Organization</span>
+    <div class="gene-card-content">
+        <mat-tab-group (selectedTabChange)="onTabChange($event)" >
+            <mat-tab label="Creation">
+                <div class="pad-t-mat pad-b-mat">
+                    <app-organization-creation></app-organization-creation>
+                </div>
+            </mat-tab>
+            <mat-tab label="Search">
+                <div class="pad-t-mat pad-b-mat">
+                    <app-organization-search></app-organization-search>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</mat-card>

@@ -1,0 +1,36 @@
+<form #feedbackForm="ngForm">
+    <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign=" start" class="gene-form-wizard">
+        <mat-card fxFlex="100%">
+            <mat-card-content>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Feedback</mat-label>
+                            <textarea matInput placeholder="Feedback" name="comment" rows="4" cols="50"
+                                      [(ngModel)]="packageFeedback.comment" #comment="ngModel" required>
+                        </textarea>
+                            <div *ngIf="comment.errors && (comment.dirty || comment.touched)">
+                                <small class="gene-block" *ngIf="comment.errors.required && comment.touched"
+                                       class="mat-text-warn">
+                                    You must include a feedback.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="pad-wrap">
+        <mat-card-actions>
+            <button  (click)="feedback()" [disabled]="!feedbackForm.valid"
+                    mat-raised-button
+                    color="primary" type="submit">Post Feedback
+            </button>
+
+            <button class="dialog-cancel-button" (click)="onCancel.emit()" color="warn" mat-raised-button>
+                Close
+            </button>
+        </mat-card-actions>
+    </div>
+</form>

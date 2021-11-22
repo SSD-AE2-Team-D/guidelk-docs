@@ -1,0 +1,13 @@
+<section class="example-section">
+    <table>
+        <tbody>
+        <tr>
+            <td *ngFor="let role of roleList">
+                <mat-checkbox [(ngModel)]="role.isAssigned"
+                              class="example-margin">{{role.roleName}} &nbsp;&nbsp;
+                </mat-checkbox>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>

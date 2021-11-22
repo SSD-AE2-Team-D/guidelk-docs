@@ -1,0 +1,119 @@
+<form #moduleForm="ngForm">
+    <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign=" start" class="gene-form-wizard">
+        <mat-card fxFlex="100%">
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Module Name</mat-label>
+                        <input matInput placeholder="Module Name" name="moduleName"
+                               [(ngModel)]="module.moduleName" required
+                               #moduleName="ngModel">
+                        <div *ngIf="moduleName.errors && (moduleName.dirty || moduleName.touched)">
+                            <small class="gene-block" *ngIf="moduleName.errors.required && moduleName.touched"
+                                   class="mat-text-warn">
+                                You must include a module name.
+                            </small>
+                        </div>
+                    </mat-form-field>
+
+                </div>
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Module Code</mat-label>
+                        <input matInput placeholder="Module Code" name="moduleCode"
+                               [(ngModel)]="module.moduleCode" required
+                               #moduleCode="ngModel">
+                        <div *ngIf="moduleCode.errors && (moduleCode.dirty || moduleCode.touched)">
+                            <small class="gene-block" *ngIf="moduleCode.errors.required && moduleCode.touched"
+                                   class="mat-text-warn">
+                                You must include a module code.
+                            </small>
+                        </div>
+                    </mat-form-field>
+
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Url Pattern</mat-label>
+                        <input matInput placeholder="Url Pattern" name="urlPattern"
+                               [(ngModel)]="module.urlPattern" required
+                               #urlPattern="ngModel">
+                        <div *ngIf="urlPattern.errors && (urlPattern.dirty || urlPattern.touched)">
+                            <small class="gene-block" *ngIf="urlPattern.errors.required && urlPattern.touched"
+                                   class="mat-text-warn">
+                                You must include a url pattern.
+                            </small>
+                        </div>
+                    </mat-form-field>
+
+                </div>
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Mat Icon</mat-label>
+                        <input matInput placeholder="Mat Icon" name="icon"
+                               [(ngModel)]="module.icon"
+                               #icon="ngModel">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput placeholder="Description" name="description"
+                                  [(ngModel)]="module.description"  #description="ngModel"
+                        ></textarea>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <mat-select placeholder="Status" name="status"
+                                    [(ngModel)]="module.status" #status="ngModel"
+                                    required>
+                            <mat-option *ngFor="let status of statusList"
+                                        [value]="status.statusSeq">
+                                {{status.status}}
+                            </mat-option>
+                        </mat-select>
+                        <div *ngIf="status.errors && (status.dirty || status.touched)">
+                            <small class="gene-block" *ngIf="status.errors.required && status.touched"
+                                   class="mat-text-warn">
+                                You must select a status.
+                            </small>
+                        </div>
+                    </mat-form-field>
+
+                </div>
+            </div>
+            <app-audit *ngIf="module.moduleId" [createdBy]="module.createdBy" [createdDate]="module.createdDate"
+                       [lastModifiedBy]="module.lastModifiedBy" [lastModifiedDate]="module.lastModifiedDate">
+            </app-audit>
+        </mat-card>
+    </div>
+    <div class="pad-wrap">
+        <mat-card-actions>
+            <button *ngIf="!isUpdate" (click)="createModule()" [disabled]="!moduleForm.valid" mat-raised-button
+                    color="primary" type="submit">Save
+            </button>
+            <button *ngIf="isNew"
+                    (click)="resetForm(); module.moduleId=null; isUpdate=false; isNew=false;"
+                    [disabled]="!moduleForm.valid" mat-raised-button color="green" type="submit">New
+            </button>
+            <button *ngIf="isUpdate" (click)="updateModule()" [disabled]="!moduleForm.valid"
+                    mat-raised-button color="accent" type="submit">Update
+            </button>
+            <button *ngIf="isUpdate" (click)="deleteModule()"
+                    [disabled]="!rolePermission.filterPermission('ROLE_config@module_DELETE')" mat-raised-button
+                    color="warn" type="submit">
+                Delete
+            </button>
+            <button *ngIf="isUpdate && !isNew" class="dialog-cancel-button" (click)="onCancel.emit()" mat-raised-button>
+                Cancel
+            </button>
+
+        </mat-card-actions>
+    </div>
+</form>

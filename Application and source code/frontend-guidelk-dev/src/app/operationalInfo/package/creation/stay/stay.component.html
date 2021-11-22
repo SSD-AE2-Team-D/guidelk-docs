@@ -1,0 +1,227 @@
+<form #stayForm="ngForm">
+    <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign=" start" class="gene-form-wizard">
+        <mat-card fxFlex="100%">
+            <mat-card-content>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div *ngIf="actionType=== 'Create'" fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Hotel</mat-label>
+                            <mat-select placeholder="Hotel" name="hotelId"
+                                        (selectionChange)="getRoomTypeList()"
+                                        [(ngModel)]="hotelPackage.hotelId"
+                                        #HotelId="ngModel"
+                                        required>
+                                <mat-option *ngFor="let hotel of hotelList"
+                                            [value]="hotel.hotelId">
+                                    {{hotel.hotelName}}
+                                </mat-option>
+                            </mat-select>
+                            <div *ngIf="HotelId.errors && (HotelId.dirty || HotelId.touched)">
+                                <small class="gene-block"
+                                       *ngIf="HotelId.errors.required && HotelId.touched"
+                                       class="mat-text-warn">
+                                    You must select a hotel.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="actionType=== 'Update'" fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Hotel</mat-label>
+                            <input matInput placeholder="Hotel"
+                                   [value]="hotelPackage.hotel.hotelName" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Room Type</mat-label>
+                            <mat-select placeholder="Room Type" name="hotelId"
+                                        [(ngModel)]="hotelPackage.roomTypeId" #roomTypeId="ngModel"
+                                        required>
+                                <mat-option *ngFor="let roomType of roomTypeList"
+                                            [value]="roomType.roomTypeId">
+                                    {{roomType.roomType}}
+                                </mat-option>
+                            </mat-select>
+                            <div *ngIf="roomTypeId.errors && (roomTypeId.dirty || roomTypeId.touched)">
+                                <small class="gene-block"
+                                       *ngIf="roomTypeId.errors.required && roomTypeId.touched"
+                                       class="mat-text-warn">
+                                    You must select a room type.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Package Name</mat-label>
+                            <input matInput placeholder="Package Name" name="packageName"
+                                   [(ngModel)]="hotelPackage.packageName" required
+                                   #packageName="ngModel">
+                            <div *ngIf="packageName.errors && (packageName.dirty || packageName.touched)">
+                                <small class="gene-block"
+                                       *ngIf="packageName.errors.required && packageName.touched"
+                                       class="mat-text-warn">
+                                    You must include a package name.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Package Description</mat-label>
+                            <textarea matInput placeholder="Package Description" name="description"
+                                      [(ngModel)]="hotelPackage.description" required #description="ngModel">
+                        </textarea>
+                            <div *ngIf="description.errors && (description.dirty || description.touched)">
+                                <small class="gene-block"
+                                       *ngIf="description.errors.required && description.touched"
+                                       class="mat-text-warn">
+                                    You must include a package description.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Start Date</mat-label>
+                            <input matInput [(ngModel)]="hotelPackage.startDate" [matDatepicker]="startDate"
+                                   name="startDate" required #StartDate="ngModel">
+                            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                            <mat-datepicker #startDate></mat-datepicker>
+                            <div *ngIf="StartDate.errors && (StartDate.dirty || StartDate.touched)">
+                                <small class="gene-block"
+                                       *ngIf="StartDate.errors.required && StartDate.touched"
+                                       class="mat-text-warn">
+                                    You must include a start date.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>End Date</mat-label>
+                            <input matInput [(ngModel)]="hotelPackage.endDate" [matDatepicker]="endDate"
+                                   required #EndDate="ngModel"
+                                   [min]="hotelPackage.startDate" name="endDate">
+                            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                            <mat-datepicker #endDate></mat-datepicker>
+                            <div *ngIf="EndDate.errors && (EndDate.dirty || EndDate.touched)">
+                                <small class="gene-block"
+                                       *ngIf="EndDate.errors.required && EndDate.touched"
+                                       class="mat-text-warn">
+                                    You must include a end date.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Amount</mat-label>
+                            <input matInput type="number" placeholder="Amount" name="amount"
+                                   [(ngModel)]="hotelPackage.amount" required
+                                   #amount="ngModel">
+                            <div *ngIf="amount.errors && (amount.dirty || amount.touched)">
+                                <small class="gene-block"
+                                       *ngIf="amount.errors.required && amount.touched"
+                                       class="mat-text-warn">
+                                    You must include a amount.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Availability Count</mat-label>
+                            <input matInput type="number" placeholder="Availability Count" name="availabilityCount"
+                                   [(ngModel)]="hotelPackage.availabilityCount" required
+                                   #availabilityCount="ngModel">
+                            <div *ngIf="availabilityCount.errors && (availabilityCount.dirty || availabilityCount.touched)">
+                                <small class="gene-block"
+                                       *ngIf="availabilityCount.errors.required && availabilityCount.touched"
+                                       class="mat-text-warn">
+                                    You must include a availability count.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Status</mat-label>
+                            <mat-select placeholder="Status" name="status"
+                                        [(ngModel)]="hotelPackage.status" #status="ngModel"
+                                        required>
+                                <mat-option *ngFor="let status of statusList"
+                                            [value]="status.statusSeq">
+                                    {{status.status}}
+                                </mat-option>
+                            </mat-select>
+                            <div *ngIf="status.errors && (status.dirty || status.touched)">
+                                <small class="gene-block" *ngIf="status.errors.required && status.touched"
+                                       class="mat-text-warn">
+                                    You must select a status.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <div class="mat-card-devHdr" style="font-size: medium; font-weight: bold">Activities</div>
+                        <mat-card-content>
+                            <mat-card fxFlex="75%">
+                                <app-package-activity-display
+                                        [actionType]="actionType"
+                                        [displayPackageActivityList]="hotelPackage.hotelPackageActivities"></app-package-activity-display>
+                            </mat-card>
+                        </mat-card-content>
+                    </div>
+                </div>
+            </mat-card-content>
+            <div *ngIf="isUpdate" style="float: right">
+                <button mat-raised-button color="accent"
+                        matTooltip="Feedback" type="button" (click)="openDialog(hotelPackage.hotelPackageId)">
+                    <mat-icon>feedback</mat-icon>
+                </button>
+            </div>
+            <app-audit *ngIf="hotelPackage.hotelPackageId" [createdBy]="hotelPackage.createdBy"
+                       [createdDate]="hotelPackage.createdDate"
+                       [lastModifiedBy]="hotelPackage.lastModifiedBy"
+                       [lastModifiedDate]="hotelPackage.lastModifiedDate">
+            </app-audit>
+        </mat-card>
+    </div>
+    <div class="pad-wrap">
+        <mat-card-actions>
+            <button *ngIf="!isUpdate" (click)="createHotelPackage()" [disabled]="!stayForm.valid"
+                    mat-raised-button
+                    color="primary" type="submit">Save
+            </button>
+            <button *ngIf="isNew"
+                    (click)="resetForm(); hotelPackage.hotelPackageId=null; isUpdate=false; isNew=false;"
+                    [disabled]="!stayForm.valid" mat-raised-button color="green" type="submit">New
+            </button>
+            <button *ngIf="isUpdate" (click)="updateHotelPackage()" [disabled]="!stayForm.valid"
+                    mat-raised-button color="accent" type="submit">Update
+            </button>
+            <button *ngIf="isUpdate" (click)="deleteHotelPackage()"
+                    [disabled]="!rolePermission.filterPermission('ROLE_operationalInfo@package_DELETE')"
+                    mat-raised-button
+                    color="warn" type="submit">
+                Delete
+            </button>
+            <button *ngIf="isUpdate && !isNew" class="dialog-cancel-button" (click)="onCancel.emit()" mat-raised-button>
+                Cancel
+            </button>
+
+        </mat-card-actions>
+    </div>
+</form>

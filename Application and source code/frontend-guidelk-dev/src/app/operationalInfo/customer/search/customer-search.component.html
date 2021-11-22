@@ -1,0 +1,282 @@
+<mat-card fxFlex="100%">
+    <form #customerSearchForm="ngForm">
+        <div fxLayout="column">
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>First Name</mat-label>
+                        <input matInput placeholder="First Name" name="firstName"
+                               [(ngModel)]="customerVo.firstName" #firstName="ngModel">
+                    </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Last Name</mat-label>
+                        <input matInput placeholder="Last Name" name="lastName"
+                               [(ngModel)]="customerVo.lastName" #lastName="ngModel">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>ID Number</mat-label>
+                        <input matInput placeholder="ID Number" name="identificationNumber"
+                               [(ngModel)]="customerVo.identificationNumber" #identificationNumber="ngModel">
+                    </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Passport Number</mat-label>
+                        <input matInput placeholder="Passport Number" name="passportNumber"
+                               [(ngModel)]="customerVo.passportNumber" #passportNumber="ngModel">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Occupation</mat-label>
+                        <input matInput placeholder="Occupation" name="occupation"
+                               [(ngModel)]="customerVo.occupation" #occupation="ngModel">
+                    </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Customer Type</mat-label>
+                        <mat-select placeholder="Customer Type" name="customerTypeId"
+                                    [(ngModel)]="customerVo.customerTypeId"
+                                    #customerTypeId="ngModel">
+                            <mat-option *ngFor="let customerType of customerTypeList"
+                                        [value]="customerType.customerTypeId">
+                                {{customerType.customerDescription}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Title</mat-label>
+                        <mat-select placeholder="Title" name="titleTypeId" [(ngModel)]="customerVo.titleTypeId"
+                                    #titleTypeId="ngModel">
+                            <mat-option *ngFor="let title of titleTypeList" [value]="title.titleTypeId">
+                                {{title.titleDescription}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Gender</mat-label>
+                        <mat-select placeholder="Gender" name="genderTypeId" [(ngModel)]="customerVo.genderTypeId"
+                                    #genderTypeId="ngModel">
+                            <mat-option *ngFor="let gender of genderTypeList" [value]="gender.genderTypeId">
+                                {{gender.genderDescription}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Country</mat-label>
+                        <mat-select placeholder="Country" name="countryId" [(ngModel)]="customerVo.countryId"
+                                    (selectionChange)="getLocationList()" #countryId="ngModel">
+                            <mat-option *ngFor="let country of countryList" [value]="country.countryId">
+                                {{country.countryName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Location</mat-label>
+                        <mat-select placeholder="Location" name="locationId" [(ngModel)]="customerVo.locationId"
+                                    #countryId="ngModel">
+                            <mat-option *ngFor="let location of locationList" [value]="location.locationId">
+                                {{location.locationName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                    <mat-form-field class="full-wid" appearance="outline">
+                        <mat-label>Status</mat-label>
+                        <mat-select placeholder="Status" name="status" [(ngModel)]="customerVo.status"
+                                    #status="ngModel">
+                            <mat-option *ngFor="let status of statusList" [value]="status.statusSeq">
+                                {{status.status}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="pad-wrap">
+                <mat-card-actions>
+                    <button (click)="searchCustomer()" mat-raised-button color="accent" type="submit">Search
+                    </button>
+                    <button (click)="customerSearchForm.resetForm()" mat-raised-button color="warn" type="submit">
+                        Reset
+                    </button>
+                </mat-card-actions>
+            </div>
+        </div>
+        <div class="example-header">
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Filter">
+            </mat-form-field>
+        </div>
+        <div class="example-container mat-elevation-z8" style="overflow: auto;">
+            <table mat-table matTableExporter [dataSource]="customerInfoTableDataSource" matSort style="width: 100%"
+                   #exporter="matTableExporter" [hiddenColumns]="[0]">
+                <ng-container matColumnDef="CustomerType">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Customer Type
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="font-size: small; font-weight:bold;">
+                        {{element.customerTypeDescription}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Title">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Title
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="font-size: small; font-weight:bold;">
+                        {{element.titleDescription}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Gender">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Gender
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="font-size: small; font-weight:bold;">
+                        {{element.genderDescription}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="FirstName">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> First Name
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="font-size: small; font-weight:bold;">
+                        {{element.firstName}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="LastName">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Last Name
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="font-size: small; font-weight:bold;">
+                        {{element.lastName}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="IdNo">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> ID Number
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="font-size: small; font-weight:bold;">
+                        {{element.identificationNumber}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="PassportNumber">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Passport Number
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="font-size: small; font-weight:bold;">
+                        {{element.passportNumber}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Occupation">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Occupation
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="font-size: small; font-weight:bold;">
+                        {{element.occupation}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Country">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Country
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="font-size: small; font-weight:bold;">
+                        {{element.addressBook.country.countryName}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Location">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Location
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="font-size: small; font-weight:bold;">
+                        {{element.addressBook.location.locationName}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="CreatedBy">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Created By
+                    </th>
+                    <td mat-cell *matCellDef="let element"
+                        style="font-size: small; font-weight:bold;"> {{element.createdBy}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="CreatedDate">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Created Date
+                    </th>
+                    <td mat-cell *matCellDef="let element"
+                        style="font-size: small; font-weight:bold;"> {{element.createdDate |  date:'MM/dd/yyyy'}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="LastModifiedBy">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Modified By
+                    </th>
+                    <td mat-cell *matCellDef="let element"
+                        style="font-size: small; font-weight:bold;"> {{element.lastModifiedBy}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="LastModifiedDate">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Modified Date
+                    </th>
+                    <td mat-cell *matCellDef="let element"
+                        style="font-size: small; font-weight:bold;"> {{element.lastModifiedDate |  date:'MM/dd/yyyy'}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Status">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Status
+                    </th>
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="{'status-open' : element.status == 1, 'status-approved' : element.status == 2, 'status-closed' : element.status == 3, 'status-deleted' : element.status == 0}"
+                        style="font-size: medium; padding: 10px"> {{element.statusDescription}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef
+                        style="font-size: small; font-weight:bold;">
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button (click)="openDialog(element)">
+                            <mat-icon color="primary">edit</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[25]"></mat-paginator>
+            <button mat-raised-button
+                    (click)="exporter.exportTable('xlsx', {fileName:'customer', sheet: 'sheet_name', Props: {Author: 'Talha'}})">
+                <span style="font-size: medium; font-weight: bold; color: #2eb82e"> Excel</span>
+            </button>
+            &nbsp;
+            <button mat-raised-button (click)="exporter.exportTable('csv', {fileName:'customer', sheet: 'sheet_name', Props: {Author: 'Talha'}})">
+                <span style="font-size: medium; font-weight: bold; color: #009999"> Csv</span>
+            </button>
+            &nbsp;
+            <button mat-raised-button (click)="exporter.exportTable('json', {fileName:'customer', sheet: 'sheet_name', Props: {Author: 'Talha'}})">
+                <span style="font-size: medium; font-weight: bold; color: #ec1313"> Json</span>
+            </button>
+            &nbsp;
+            <button mat-raised-button (click)="exporter.exportTable('txt', {fileName:'customer', sheet: 'sheet_name', Props: {Author: 'Talha'}})">
+                <span style="font-size: medium; font-weight: bold; color: #24292e"> Txt</span>
+            </button>
+            &nbsp;
+
+        </div>
+    </form>
+</mat-card>

@@ -1,0 +1,3 @@
+<section class="example-section">
+    <mat-checkbox *ngFor="let authority of authorityList" [(ngModel)]="authority.isAssigned" class="example-margin">{{authority.authorityName | authorityTruncate}} &nbsp;&nbsp; </mat-checkbox>
+</section>

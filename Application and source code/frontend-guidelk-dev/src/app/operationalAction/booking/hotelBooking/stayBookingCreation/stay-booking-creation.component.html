@@ -1,0 +1,333 @@
+<form #hotelBookingForm="ngForm">
+    <div fxLayout="row" fxLayoutWrap="wrap" fxLayoutAlign=" start" class="gene-form-wizard">
+        <mat-card fxFlex="100%">
+            <mat-card-content>
+                <div *ngIf="hotelBooking.hotelBookingId" fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <small class="gene-block" class="mat-text" style="font-size: medium; color:#0066eb">
+                            Booking No : {{hotelBooking.bookingNumber}}
+                        </small>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Check-in Date</mat-label>
+                            <input matInput [(ngModel)]="hotelBooking.checkInDate" [matDatepicker]="checkInDate"
+                                   name="checkInDate" [min]="todayDate" required #CheckInDate="ngModel">
+                            <mat-datepicker-toggle matSuffix [for]="checkInDate"></mat-datepicker-toggle>
+                            <mat-datepicker #checkInDate></mat-datepicker>
+                            <div *ngIf="CheckInDate.errors && (CheckInDate.dirty || CheckInDate.touched)">
+                                <small class="gene-block"
+                                       *ngIf="CheckInDate.errors.required && CheckInDate.touched"
+                                       class="mat-text-warn">
+                                    You must include a check-in date.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Check-out Date</mat-label>
+                            <input matInput [(ngModel)]="hotelBooking.checkOutDate" [matDatepicker]="checkOutDate"
+                                   required #CheckOutDate="ngModel"
+                                   [min]="hotelBooking.checkOutDate" name="checkOutDate">
+                            <mat-datepicker-toggle matSuffix [for]="checkOutDate"></mat-datepicker-toggle>
+                            <mat-datepicker #checkOutDate></mat-datepicker>
+                            <div *ngIf="CheckOutDate.errors && (CheckOutDate.dirty || CheckOutDate.touched)">
+                                <small class="gene-block"
+                                       *ngIf="CheckOutDate.errors.required && CheckOutDate.touched"
+                                       class="mat-text-warn">
+                                    You must include a check-out date.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div *ngIf="actionType=== 'Create'" fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Hotel</mat-label>
+                            <mat-select placeholder="Hotel" name="hotelId"
+                                        [(ngModel)]="hotelBooking.hotelId"
+                                        (selectionChange)="searchHotelPackage()"
+                                        #HotelId="ngModel"
+                                        required>
+                                <mat-option *ngFor="let hotel of hotelList"
+                                            [value]="hotel.hotelId">
+                                    {{hotel.hotelName}}
+                                </mat-option>
+                            </mat-select>
+                            <div *ngIf="HotelId.errors && (HotelId.dirty || HotelId.touched)">
+                                <small class="gene-block"
+                                       *ngIf="HotelId.errors.required && HotelId.touched"
+                                       class="mat-text-warn">
+                                    You must select a hotel.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="actionType=== 'Update'" fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Hotel</mat-label>
+                            <input matInput placeholder="Hotel"
+                                   [value]="hotelBooking.hotel.hotelName" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="actionType=== 'Create'" fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Customer</mat-label>
+                            <mat-select placeholder="Customer" name="customerId"
+                                        [(ngModel)]="hotelBooking.customerId"
+                                        #customerId="ngModel"
+                                        required>
+                                <mat-option *ngFor="let customer of customerList"
+                                            [value]="customer.customerId">
+                                    <span style="color: #3A405B"><span>{{customer.titleDescription}}&nbsp;<span>{{customer.firstName}}</span>&nbsp;<span>{{customer.lastName}}</span>&nbsp;</span></span> &nbsp;
+                                </mat-option>
+                            </mat-select>
+                            <div *ngIf="customerId.errors && (customerId.dirty || customerId.touched)">
+                                <small class="gene-block"
+                                       *ngIf="customerId.errors.required && customerId.touched"
+                                       class="mat-text-warn">
+                                    You must select a customer.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="actionType=== 'Update'" fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Customer</mat-label>
+                            <input matInput placeholder="Hotel"
+                                   [value]="hotelBooking.customer.titleDescription.concat(' ').concat(hotelBooking.customer.firstName).concat(' ').concat(hotelBooking.customer.lastName)" readonly>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Adult Count</mat-label>
+                            <input matInput type="number" placeholder="Adult Count" name="adultCount"
+                                   [(ngModel)]="hotelBooking.adultCount" required
+                                   #adultCount="ngModel">
+                            <div *ngIf="adultCount.errors && (adultCount.dirty || adultCount.touched)">
+                                <small class="gene-block"
+                                       *ngIf="adultCount.errors.required && adultCount.touched"
+                                       class="mat-text-warn">
+                                    You must include a adult count.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Child Count</mat-label>
+                            <input matInput type="number" placeholder="Child Count" name="childCount"
+                                   [(ngModel)]="hotelBooking.childCount" required
+                                   #childCount="ngModel">
+                            <div *ngIf="childCount.errors && (childCount.dirty || childCount.touched)">
+                                <small class="gene-block"
+                                       *ngIf="childCount.errors.required && childCount.touched"
+                                       class="mat-text-warn">
+                                    You must include a child count.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Room Count</mat-label>
+                            <input matInput type="number" placeholder="Room Count" name="roomCount"
+                                   [(ngModel)]="hotelBooking.roomCount" (keypress)="setTotal()"  required
+                                   #roomCount="ngModel">
+                            <div *ngIf="roomCount.errors && (roomCount.dirty || roomCount.touched)">
+                                <small class="gene-block"
+                                       *ngIf="roomCount.errors.required && roomCount.touched"
+                                       class="mat-text-warn">
+                                    You must include a room count.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+                        <mat-form-field class="full-wid" appearance="outline">
+                            <mat-label>Status</mat-label>
+                            <mat-select placeholder="Status" name="status"
+                                        [(ngModel)]="hotelBooking.status" #status="ngModel"
+                                        required>
+                                <mat-option *ngFor="let status of statusList"
+                                            [value]="status.statusSeq">
+                                    {{status.status}}
+                                </mat-option>
+                            </mat-select>
+                            <div *ngIf="status.errors && (status.dirty || status.touched)">
+                                <small class="gene-block" *ngIf="status.errors.required && status.touched"
+                                       class="mat-text-warn">
+                                    You must select a status.
+                                </small>
+                            </div>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="example-header">
+                    <span style="font-size: xx-large; font-weight: bold; color: #2eb82e">Total : &nbsp;<span style="font-size: x-large; font-weight: bold; color:#7e0c00">{{total | number}}</span></span>
+                </div>
+            </mat-card-content>
+            <div *ngIf="isUpdate && hotelBooking.status !==0 && hotelBooking.bookingStatus ===1" style="float: right">
+                <button mat-raised-button color="accent"
+                        matTooltip="Confirm" type="button" (click)="bookingConfirm()">
+                    <mat-icon>check</mat-icon>
+                </button>
+            </div>
+        </mat-card>
+    </div>
+    <mat-card>
+        <mat-card-content>
+            <div class="example-header">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Filter">
+                </mat-form-field>
+            </div>
+            <div class="example-container mat-elevation-z8" style="overflow: auto;">
+                <table mat-table matTableExporter [dataSource]="hotelBookingInfoTableDataSource" matSort style="width: 100%"
+                       #exporter="matTableExporter" [hiddenColumns]="[0]">
+                    <ng-container matColumnDef="Hotel">
+                        <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Hotel
+                        </th>
+                        <td mat-cell *matCellDef="let element" style="font-size: large; font-weight:bold; color: #1976d2">
+                            {{element.hotel.hotelName}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="PackageName">
+                        <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> PackageName
+                        </th>
+                        <td mat-cell *matCellDef="let element" style="font-size: large; font-weight:bold; color: #1976d2">
+                            {{element.packageName}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="RoomType">
+                        <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Room Type
+                        </th>
+                        <td mat-cell *matCellDef="let element" style="font-size: large; font-weight:bold; color: #1976d2">
+                            {{element.roomType.roomType}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="StartDate">
+                        <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Start Date
+                        </th>
+                        <td mat-cell *matCellDef="let element" style="font-size: large; font-weight:bold; color: #1976d2">
+                            {{element.startDate| date:'MM/dd/yyyy'}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="EndDate">
+                        <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> End Date
+                        </th>
+                        <td mat-cell *matCellDef="let element" style="font-size: large; font-weight:bold; color: #1976d2">
+                            {{element.endDate| date:'MM/dd/yyyy'}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="AvailabilityCount">
+                        <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Availability Count
+                        </th>
+                        <td mat-cell *matCellDef="let element" style="font-size: large; font-weight:bold; color: #1976d2">
+                            {{element.availabilityCount}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Amount">
+                        <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Amount
+                        </th>
+                        <td mat-cell *matCellDef="let element" style="font-size: large; font-weight:bold; color: #1976d2">
+                            {{element.amount | number}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Description">
+                        <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Description
+                        </th>
+                        <td mat-cell *matCellDef="let element" style="font-size: large; font-weight:bold; color: #1976d2">
+                            {{element.description}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Activity">
+                        <th mat-header-cell *matHeaderCellDef style="font-size: small; font-weight:bold;"> Activity
+                        </th>
+                        <td mat-cell *matCellDef="let element" style="font-size: medium; font-weight:bold; color: #ec1313">
+                            <span *ngFor="let activity of element.hotelPackageActivities"><li>{{activity.activityName}}</li> </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Action">
+                        <th mat-header-cell *matHeaderCellDef
+                            style="font-size: small; font-weight:bold;">
+                            Action
+                        </th>
+                        <td mat-cell *matCellDef="let element " style="font-size: small; font-weight:bold;">
+                            <button class="btn btn-warning" mat-raised-button color="primary" type="button"
+                                    (click)="pickPackage(element)">
+                                Pick Package
+                            </button>
+                        </td>
+
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[25]"></mat-paginator>
+                <button mat-raised-button
+                        (click)="exporter.exportTable('xlsx', {fileName:'hotel', sheet: 'sheet_name', Props: {Author: 'Talha'}})">
+                    <span style="font-size: medium; font-weight: bold; color: #2eb82e"> Excel</span>
+                </button>
+                &nbsp;
+                <button mat-raised-button
+                        (click)="exporter.exportTable('csv', {fileName:'hotel', sheet: 'sheet_name', Props: {Author: 'Talha'}})">
+                    <span style="font-size: medium; font-weight: bold; color: #009999"> Csv</span>
+                </button>
+                &nbsp;
+                <button mat-raised-button
+                        (click)="exporter.exportTable('json', {fileName:'hotel', sheet: 'sheet_name', Props: {Author: 'Talha'}})">
+                    <span style="font-size: medium; font-weight: bold; color: #ec1313"> Json</span>
+                </button>
+                &nbsp;
+                <button mat-raised-button
+                        (click)="exporter.exportTable('txt', {fileName:'hotel', sheet: 'sheet_name', Props: {Author: 'Talha'}})">
+                    <span style="font-size: medium; font-weight: bold; color: #24292e"> Txt</span>
+                </button>
+                &nbsp;
+
+            </div>
+        </mat-card-content>
+        <app-audit *ngIf="hotelBooking.hotelBookingId" [createdBy]="hotelBooking.createdBy"
+                   [createdDate]="hotelBooking.createdDate"
+                   [lastModifiedBy]="hotelBooking.lastModifiedBy"
+                   [lastModifiedDate]="hotelBooking.lastModifiedDate">
+        </app-audit>
+    </mat-card>
+
+    <div class="pad-wrap">
+        <mat-card-actions>
+            <button *ngIf="!isUpdate" (click)="createHotelBooking()" [disabled]="!hotelBookingForm.valid"
+                    mat-raised-button
+                    color="primary" type="submit">Save
+            </button>
+            <button *ngIf="isNew"
+                    (click)="resetForm(); hotelBooking.hotelBookingId=null; isUpdate=false; isNew=false;"
+                    [disabled]="!hotelBookingForm.valid" mat-raised-button color="green" type="submit">New
+            </button>
+            <button *ngIf="isUpdate" (click)="updateHotelBooking()" [disabled]="!hotelBookingForm.valid"
+                    mat-raised-button color="accent" type="submit">Update
+            </button>
+            <button *ngIf="isUpdate" (click)="deleteHotelBooking()"
+                    [disabled]="!rolePermission.filterPermission('ROLE_operationalAction@booking_DELETE')"
+                    mat-raised-button
+                    color="warn" type="submit">
+                Delete
+            </button>
+            <button *ngIf="isUpdate && !isNew" class="dialog-cancel-button" (click)="onCancel.emit()" mat-raised-button>
+                Cancel
+            </button>
+
+        </mat-card-actions>
+    </div>
+</form>

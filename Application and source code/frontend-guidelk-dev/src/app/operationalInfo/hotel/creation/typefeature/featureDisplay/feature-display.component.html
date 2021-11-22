@@ -1,0 +1,5 @@
+<section class="example-section">
+    <mat-checkbox *ngFor="let feature of roomFeatureList ; let i = index" [(ngModel)]="feature.isAssigned"  class="example-margin">{{feature.feature}}
+   &nbsp;
+    </mat-checkbox>
+</section>

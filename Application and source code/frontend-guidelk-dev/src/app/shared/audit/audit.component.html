@@ -1,0 +1,28 @@
+<div class="box-inset pad-all-md mrgn-b-md">
+    <div fxLayout="row"  fxLayoutAlign="space-between center">
+        <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+            <small class="gene-block" class="mat-text">
+                Created By : {{createdBy}}
+            </small>
+        </div>
+
+        <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+            <small class="gene-block" class="mat-text">
+                Last Modified By : {{lastModifiedBy}}
+            </small>
+        </div>
+    </div>
+    <div fxLayout="row"  fxLayoutAlign="space-between center">
+        <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+            <small class="gene-block" class="mat-text">
+                Created Date : {{createdDate | date:'yyyy-MM-dd HH:mm'}}
+            </small>
+        </div>
+
+        <div fxFlex.gt-sm="49" fxFlex.gt-xs="49" fxFlex="100">
+            <small class="gene-block" class="mat-text">
+                Last Modified Date : {{lastModifiedDate | date:'yyyy-MM-dd HH:mm'}}
+            </small>
+        </div>
+    </div>
+</div>
